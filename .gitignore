@@ -1,0 +1,8 @@
+.DS_Store
+.idea
+.env
+.nyc_output
+.history
+coverage
+node_modules
+dist
