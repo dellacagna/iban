@@ -1,3 +1,6 @@
+[![npm version](https://badge.fury.io/js/@dellacagna%2Fiban.svg)](https://badge.fury.io/js/@dellacagna%2Fiban)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/dellacagna/iban/master/LICENSE)
+
 # IBAN Library
 A simple library for validating, formatting and generating fake IBAN numbers.
 
