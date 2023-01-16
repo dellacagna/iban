@@ -21,7 +21,7 @@
   },
   "keywords": ["IBAN", "BBAN", "Validator", "Formatter"],
   "author": "Giovanni Della Cagna",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dellacagna/iban/issues"
   },
