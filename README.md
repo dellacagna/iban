@@ -109,7 +109,7 @@ example:
 ```ts
 let iban = new IBAN('BA39 1290 0794 0102 8494');
 let fields = iban.getFields()
-console.log(fields); 
+console.log(fields);
 
 /* This will output:
   {
