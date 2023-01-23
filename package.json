@@ -1,6 +1,6 @@
 {
   "name": "@dellacagna/iban",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Validate, format and generate IBAN numbers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,7 +19,16 @@
     "type": "git",
     "url": "git+https://github.com/dellacagna/iban.git"
   },
-  "keywords": ["IBAN", "BBAN", "Validator", "Formatter"],
+  "keywords": [
+    "IBAN",
+    "BBAN",
+    "Validator",
+    "Formatter",
+    "Fake",
+    "Generator",
+    "Generate"
+
+  ],
   "author": "Giovanni Della Cagna",
   "license": "MIT",
   "bugs": {
