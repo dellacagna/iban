@@ -196,7 +196,7 @@ export class IBAN {
       : IBAN.getRandomCountrySpecification();
 
     if (!spec) {
-      return IBAN.generate();
+      return IBAN.random();
     }
 
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
