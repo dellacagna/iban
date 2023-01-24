@@ -81,6 +81,10 @@ export class IBAN {
     return result ? result[0] : null;
   }
 
+  private static getRandomCountrySpecification(): IbanSpecification {
+    return specifications[Math.floor(Math.random() * specifications.length)];
+  }
+
   private static mod97(a: string): number {
     let result = 0;
     for (const i of a) {
@@ -184,5 +188,42 @@ export class IBAN {
     Object.keys(fields).forEach((k) => fields[k] === '' && delete fields[k]);
 
     return fields;
+  }
+
+  public static random(countryCode: string | null = null): string {
+    const spec = countryCode
+      ? IBAN.getCountrySpecification(countryCode.toUpperCase())
+      : IBAN.getRandomCountrySpecification();
+
+    if (!spec) {
+      return IBAN.generate();
+    }
+
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+    let bban = '';
+    spec.formatRules.forEach((rule) => {
+      const [type, repeat] = rule.slice(0, -1).split('{');
+      for (let i = 0; i < +repeat; i++) {
+        if (type === '[A-Z]') {
+          bban += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+        } else if (type === '\\d') {
+          bban += Math.floor(Math.random() * 10);
+        } else {
+          bban += alphanumeric.charAt(Math.floor(Math.random() * alphanumeric.length));
+        }
+      }
+    });
+
+    // Calculate Check Digit
+    let tempIBAN = bban + spec.code + '00';
+    tempIBAN = tempIBAN.replace(/[A-Z]/g, (c) => {
+      return (c.charCodeAt(0) - 55).toString();
+    });
+    let checkDigit = (98 - IBAN.mod97(tempIBAN)).toString();
+    checkDigit = checkDigit.length === 1 ? '0' + checkDigit : checkDigit;
+
+    return IBAN.printFormat(spec.code + checkDigit + bban);
   }
 }

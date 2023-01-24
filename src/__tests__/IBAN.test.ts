@@ -118,3 +118,10 @@ test('getFields', () => {
 
   expect(iban.getFields()).toStrictEqual(expected);
 });
+
+test('Random IBAN from Random Country', () => {
+  for (let i = 0; i < 10; i++) {
+    const iban = new IBAN(IBAN.random());
+    expect(iban.isValid()).toBe(true);
+  }
+});

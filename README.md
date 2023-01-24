@@ -123,6 +123,21 @@ console.log(fields);
  } 
 */
 ```
+### random()
+Generate a random IBAN number and return it as a string in print format. You can optionally pass the country code to specify a random IBAN for that country
+
+example (random country):
+```ts
+let iban = IBAN.random();
+console.log(iban); //example output: GB82 WEST 1234 5698 7654 32
+```
+
+example (specified country):
+```ts
+let iban = IBAN.random('IT');
+console.log(iban); //example output: IT60 X054 2811 1010 0000 0123 456
+```
+
 ## Resources
 * [Changelog](https://github.com/dellacagna/iban/blob/master/CHANGELOG.md)
 * [License](https://raw.githubusercontent.com/dellacagna/iban/master/LICENSE)
