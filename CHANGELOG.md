@@ -3,7 +3,7 @@ Changelog
 
 ### 2.0.0
 
-* Release TBD
+* Release Nov 19, 2026
   * **Breaking:** `IBAN.random()` throws a `RangeError` for unsupported country codes instead of returning an IBAN for a random country
   * **Breaking:** `getError()` returns the `errorCodes` enum type instead of `string` (runtime values unchanged)
   * **Breaking:** requires Node.js 18+; output targets ES2018 instead of ES5
