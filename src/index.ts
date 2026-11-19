@@ -8,7 +8,7 @@ export type { IbanSpecification } from './lib/specifications';
 
 export class IBAN {
   private readonly original: string;
-  private error: string | undefined;
+  private error: errorCodes | undefined;
 
   constructor(iban: string) {
     this.original = iban;
@@ -34,7 +34,7 @@ export class IBAN {
     return IBAN.extractFields(this.original);
   }
 
-  public getError(): string | undefined {
+  public getError(): errorCodes | undefined {
     if (!this.error) {
       this.isValid();
     }
@@ -81,12 +81,17 @@ export class IBAN {
   }
 
   private static getCountrySpecification(countryCode: string): IbanSpecification | undefined {
-    for (const spec of specifications) {
-      if (spec.code === countryCode) {
-        return spec;
-      }
-    }
-    return undefined;
+    return specifications.find((spec) => spec.code === countryCode);
+  }
+
+  /** Returns the ISO 3166-1 alpha-2 codes of all supported countries, sorted alphabetically. */
+  public static supportedCountries(): string[] {
+    return specifications.map((spec) => spec.code);
+  }
+
+  /** Returns true if IBANs from this country (ISO 3166-1 alpha-2 code, case-insensitive) are supported. */
+  public static isSupportedCountry(countryCode: string): boolean {
+    return IBAN.getCountrySpecification(countryCode.toUpperCase()) !== undefined;
   }
 
   private static getRandomCountrySpecification(): IbanSpecification {
@@ -202,13 +207,18 @@ export class IBAN {
     return result;
   }
 
-  public static random(countryCode: string | null = null): string {
-    const spec = countryCode
-      ? IBAN.getCountrySpecification(countryCode.toUpperCase())
-      : IBAN.getRandomCountrySpecification();
+  /**
+   * Generates a random IBAN with valid check digits, in print format.
+   * @throws {RangeError} if `countryCode` is given but not supported.
+   */
+  public static random(countryCode?: string): string {
+    const spec =
+      countryCode == null
+        ? IBAN.getRandomCountrySpecification()
+        : IBAN.getCountrySpecification(countryCode.toUpperCase());
 
     if (!spec) {
-      return IBAN.random();
+      throw new RangeError(`Unsupported IBAN country code: ${countryCode}`);
     }
 
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';

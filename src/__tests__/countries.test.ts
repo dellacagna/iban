@@ -83,3 +83,31 @@ test('country codes are unique and sorted', () => {
   expect(new Set(codes).size).toBe(codes.length);
   expect([...codes].sort()).toEqual(codes);
 });
+
+describe('v2 API', () => {
+  test('random() throws for unsupported countries', () => {
+    expect(() => IBAN.random('ZZ')).toThrow(RangeError);
+    expect(() => IBAN.random('')).toThrow('Unsupported IBAN country code');
+  });
+
+  test('random() accepts lower-case codes and treats null as "any country"', () => {
+    expect(IBAN.random('de').slice(0, 2)).toBe('DE');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(new IBAN(IBAN.random(null as any)).isValid()).toBe(true);
+  });
+
+  test('supportedCountries() lists every specification', () => {
+    expect(IBAN.supportedCountries()).toEqual(specifications.map((s) => s.code));
+    expect(IBAN.supportedCountries()).toContain('YE');
+  });
+
+  test('isSupportedCountry()', () => {
+    expect(IBAN.isSupportedCountry('gb')).toBe(true);
+    expect(IBAN.isSupportedCountry('US')).toBe(false);
+  });
+
+  test('getError() returns an errorCodes value', () => {
+    const error: errorCodes | undefined = new IBAN('GB82 WEST 1234 5628 7654 32').getError();
+    expect(error).toBe(errorCodes.checksumFailed);
+  });
+});
