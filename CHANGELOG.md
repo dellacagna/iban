@@ -1,6 +1,17 @@
 Changelog
 =========
 
+### 2.0.0
+
+* Release TBD
+  * **Breaking:** `IBAN.random()` throws a `RangeError` for unsupported country codes instead of returning an IBAN for a random country
+  * **Breaking:** `getError()` returns the `errorCodes` enum type instead of `string` (runtime values unchanged)
+  * **Breaking:** requires Node.js 18+; output targets ES2018 instead of ES5
+  * **Breaking:** added an `exports` map, so deep imports into `dist/` are no longer possible
+  * Ships native ES modules alongside CommonJS, each with its own type declarations
+  * Added `IBAN.supportedCountries()` and `IBAN.isSupportedCountry()`
+  * See the [migration guide](README.md#migrating-to-20)
+
 ### 1.2.0
 
 * Release TBD
