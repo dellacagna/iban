@@ -18,6 +18,10 @@ A small, dependency-free TypeScript library for validating, formatting, parsing 
 npm install @dellacagna/iban
 ```
 
+Requires Node.js 18 or later. The package ships both ES modules and CommonJS, with TypeScript types for each.
+
+> Upgrading from 1.x? See [Migrating to 2.0](#migrating-to-20).
+
 ## Usage
 
 ```ts
@@ -53,9 +57,9 @@ const iban = new IBAN('GB82 WEST 1234 5698 7654 32');
 iban.isValid(); // true
 ```
 
-### `getError(): string | undefined`
+### `getError(): errorCodes | undefined`
 
-Returns why the IBAN is invalid, or `undefined` if it is valid. The possible values are exported as `errorCodes`:
+Returns why the IBAN is invalid, or `undefined` if it is valid. The possible values are exported as the `errorCodes` enum:
 
 | `errorCodes`     | Value             | Meaning                                                |
 | ---------------- | ----------------- | ------------------------------------------------------ |
@@ -145,14 +149,32 @@ new IBAN('BA39 1290 0794 0102 8494').getFields();
 
 ### `IBAN.random(countryCode?: string): string`
 
-Generates a random IBAN with valid check digits, in print format. Pass a country code to choose the country; otherwise one is picked at random. The result is structurally valid but almost certainly not a real account, so it is only meant for tests and fake data.
+Generates a random IBAN with valid check digits, in print format. Pass a country code (case-insensitive) to choose the country; otherwise one is picked at random. The result is structurally valid but almost certainly not a real account, so it is only meant for tests and fake data.
 
 ```ts
 IBAN.random(); // e.g. 'GB82 WEST 1234 5698 7654 32'
 IBAN.random('IT'); // e.g. 'IT60 X054 2811 1010 0000 0123 456'
+IBAN.random('US'); // throws RangeError: Unsupported IBAN country code: US
 ```
 
-> If the country code is not supported, an IBAN for a random country is returned.
+Throws a `RangeError` if the country is not supported.
+
+### `IBAN.supportedCountries(): string[]`
+
+Returns the country codes of all supported countries, sorted alphabetically.
+
+```ts
+IBAN.supportedCountries(); // ['AD', 'AE', 'AL', ...]
+```
+
+### `IBAN.isSupportedCountry(countryCode: string): boolean`
+
+Returns `true` if the country (case-insensitive) is supported.
+
+```ts
+IBAN.isSupportedCountry('gb'); // true
+IBAN.isSupportedCountry('US'); // false
+```
 
 ### Static helpers
 
@@ -173,14 +195,22 @@ It also supports 23 countries that use IBAN but are not in the official registry
 
 Algeria (DZ), Angola (AO), Benin (BJ), Burkina Faso (BF), Cabo Verde (CV), Cameroon (CM), Central African Republic (CF), Chad (TD), Comoros (KM), Congo (CG), Côte d'Ivoire (CI), Equatorial Guinea (GQ), Gabon (GA), Guinea-Bissau (GW), Honduras (HN), Iran (IR), Madagascar (MG), Mali (ML), Morocco (MA), Mozambique (MZ), Niger (NE), Senegal (SN), Togo (TG).
 
+## Migrating to 2.0
+
+- **Node.js 18+ is required**, and the build targets ES2018 instead of ES5. If you need to support very old browsers, transpile the package in your bundler.
+- **`IBAN.random('XX')` throws a `RangeError`** for unsupported countries instead of quietly returning an IBAN for a random country. Use `IBAN.isSupportedCountry()` to check first.
+- **`getError()` returns the `errorCodes` enum** instead of `string`. The runtime values are unchanged (`'INVALID_LENGTH'` etc.), but TypeScript may now flag comparisons with plain strings. Compare with `errorCodes.invalidLength` instead.
+- **The package has an `exports` map.** Only the package root (`@dellacagna/iban`) can be imported; deep imports such as `@dellacagna/iban/dist/lib/constants` no longer work. Everything you need is exported from the root.
+
 ## Development
 
 ```sh
 npm install
-npm test          # Jest
-npm run lint      # ESLint
-npm run typecheck # tsc --noEmit
-npm run build     # compile to dist/
+npm test               # Jest
+npm run lint           # ESLint
+npm run typecheck      # tsc --noEmit
+npm run build          # ESM + CommonJS + types in dist/ (tsup)
+npm run check:exports  # verify the package resolves for ESM, CommonJS and TypeScript
 ```
 
 ## Resources
