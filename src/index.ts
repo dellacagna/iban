@@ -2,6 +2,10 @@ import { IbanSpecification, specifications } from './lib/specifications';
 import { errorCodes, fieldChar } from './lib/constants';
 import { Fields } from './lib/types';
 
+export { errorCodes } from './lib/constants';
+export type { Fields } from './lib/types';
+export type { IbanSpecification } from './lib/specifications';
+
 export class IBAN {
   private readonly original: string;
   private error: string | undefined;
@@ -52,7 +56,7 @@ export class IBAN {
       return false;
     }
 
-    const re = new RegExp('^[A-Z]{2}\\d{2}' + spec.formatRules.join(''));
+    const re = new RegExp('^[A-Z]{2}\\d{2}' + spec.formatRules.join('') + '$');
     // check length and valid characters
     if (!re.test(iban)) {
       this.error = errorCodes.invalidFormat;
@@ -76,9 +80,13 @@ export class IBAN {
     return true;
   }
 
-  private static getCountrySpecification(countryCode: string): IbanSpecification | null {
-    const result = specifications.filter((spec) => spec.code === countryCode);
-    return result ? result[0] : null;
+  private static getCountrySpecification(countryCode: string): IbanSpecification | undefined {
+    for (const spec of specifications) {
+      if (spec.code === countryCode) {
+        return spec;
+      }
+    }
+    return undefined;
   }
 
   private static getRandomCountrySpecification(): IbanSpecification {
@@ -184,10 +192,14 @@ export class IBAN {
       }
     });
 
-    // @ts-ignore
-    Object.keys(fields).forEach((k) => fields[k] === '' && delete fields[k]);
+    const result: Fields = { countryCode: code, country: spec.country, checkDigits: check };
+    (Object.keys(fields) as (keyof typeof fields)[]).forEach((k) => {
+      if (fields[k] !== '') {
+        result[k] = fields[k];
+      }
+    });
 
-    return fields;
+    return result;
   }
 
   public static random(countryCode: string | null = null): string {

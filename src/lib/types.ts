@@ -6,6 +6,7 @@ export interface Fields {
   currencyCode?: string;
   ownerAccountNumber?: string;
   accountNumberPrefix?: string;
+  bankCode?: string;
   bicBankCode?: string;
   branchCode?: string;
   accountType?: string;
