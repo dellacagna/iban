@@ -3,7 +3,7 @@ Changelog
 
 ### 1.2.0
 
-* Release TBD
+* Release Nov 19, 2026
   * Added countries from recent SWIFT IBAN registry releases: Falkland Islands (FK), Mongolia (MN), Oman (OM), Somalia (SO) and Yemen (YE)
   * Updated Burundi (BI) to the 27-character registry format
   * Updated Nicaragua (NI) to the 28-character registry format
