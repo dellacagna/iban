@@ -1,4 +1,4 @@
-export const enum fieldChar {
+export enum fieldChar {
   accountNumber = 'C',
   currencyCode = 'M',
   ownerAccountNumber = 'N',
@@ -10,7 +10,7 @@ export const enum fieldChar {
   nationalCheckDigit = 'X',
 }
 
-export const enum errorCodes {
+export enum errorCodes {
   invalidCountry = 'INVALID_COUNTRY',
   invalidLength = 'INVALID_LENGTH',
   invalidFormat = 'INVALID_FORMAT',

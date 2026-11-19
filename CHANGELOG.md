@@ -1,6 +1,25 @@
 Changelog
 =========
 
+### 1.2.0
+
+* Release TBD
+  * Added countries from recent SWIFT IBAN registry releases: Falkland Islands (FK), Mongolia (MN), Oman (OM), Somalia (SO) and Yemen (YE)
+  * Updated Burundi (BI) to the 27-character registry format
+  * Updated Nicaragua (NI) to the 28-character registry format
+  * Fixed Jordan (JO) rejecting valid IBANs with letters in the account number
+  * Added `bankCode` to the `Fields` type (it was already returned by `getFields()`)
+  * `errorCodes` is now exported, along with the `Fields` and `IbanSpecification` types
+  * Error codes and field characters are now regular enums instead of `const enum`, so they work with `isolatedModules` (Vite, esbuild, swc)
+  * Format validation now anchors the end of the pattern
+  * Tests cover every supported country, plus the SWIFT registry example IBANs for new and changed countries
+  * Tooling: TypeScript 5, Jest 30, Prettier 3, ESLint (replacing the deprecated TSLint), GitHub Actions CI
+
+### 1.1.1
+
+* Release Jan 24, 2023
+  * Fixed IBAN generator bug
+
 ### 1.1.0
 
 * Release Jan 24, 2023
